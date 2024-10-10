@@ -1,45 +1,128 @@
 <?php
-    $columnsNumber = 4;
-?>
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Template PHP</title>
 
-        <!-- Bootstrap -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    </head>
-    <body>
-        
-        <header class="py-4 mb-4">
-            <div class="container">
-                <div class="row">
-                    <div class="col text-center">
-                        <h1>
-                            Template PHP
-                        </h1>
-                    </div>
-                </div>
-            </div>
-        </header>
+class HumanBeing {
 
-        <main>
-            <div class="container">
-                <div class="row">
-                    <?php
-                        for ($i = 0; $i < $columnsNumber; $i++) {
-                    ?>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            Colonna <?php echo $i + 1; ?>
-                        </div>
-                    <?php
-                        }
-                    ?>
-                </div>
-            </div>
-        </main>
+    public $eyesColor;
+    public $height;
+    public $weight;
+    public static $planet = 'Terra';
 
-    </body>
-</html>
+    public static function whatIsMyPlanet() {
+        return self::$planet;
+    }
+
+}
+
+var_dump(HumanBeing::$planet);
+
+$mario = new HumanBeing();
+$mario->eyesColor = 'castani';
+$mario->height = 180;
+$mario->weight = 80;
+
+var_dump($mario);
+
+$francesca = new HumanBeing();
+$francesca->eyesColor = 'azzurri';
+$francesca->height = 170;
+$francesca->weight = 55;
+
+var_dump($francesca);
+
+class Animal {
+
+    public $name;
+    public $habitat;
+    private $godCode;   // Le proprietà ed i metodi privati non vengono ereditati e non sono visibili dall'esterno della classe
+    protected $legsNumber;   // Le proprietà ed i metodi protected vengono ereditati, ma non sono visibili dall'esterno della classe
+
+    function __construct(
+        $name,
+        $habitat
+    ) {
+        if (is_string($name) && strlen($name) >= 3) {
+            $this->name = $name;
+        }
+        $this->habitat = $habitat;
+    }
+    
+    public function getFullAnimal() {
+        return $this->name.' - '.$this->habitat;
+    }
+
+    public function getGodCode() {
+        return $this->godCode;
+    }
+
+    public function setGodCode($godCode) {
+        $this->godCode = $godCode;
+    }
+
+    public function getLegsNumber() {
+        return $this->legsNumber;
+    }
+
+    public function setLegsNumber($legsNumber) {
+        $this->legsNumber = $legsNumber;
+    }
+
+}
+
+class Mammal extends Animal {
+
+    public $childrenPerBirth;
+
+    function __construct(
+        $name,
+        $habitat,
+        $childrenPerBirth
+    ) {
+        parent::__construct($name, $habitat);
+        $this->childrenPerBirth = $childrenPerBirth;
+    }
+
+    public function setOtherGodCode($godCode) {
+        $this->godCode = $godCode;  // Non possono utilizzare godCode dalla classe Mammal perché è private
+    }
+
+    public function setOtherLegsNumber($legsNumber) {
+        $this->legsNumber = $legsNumber;    // Posso utilizzare legsNumber dalla classe Mammal perché è protected
+    }
+    
+    public function getFullMammal() {
+        return $this->name.' - '.$this->habitat.' - '.$this->childrenPerBirth;
+    }
+    
+    public function getFullAnimal() {
+        return parent::getFullAnimal().' - '.$this->childrenPerBirth;
+    }
+
+}
+
+$anAnimal = new Animal('Leone', 'Giungla');
+// $anAnimal->habitat = 'Giungla';
+$anAnimal->setGodCode('1234ABCD');
+$anAnimal->setLegsNumber(4);
+
+$aMammal = new Mammal(
+    'Orso polare',
+    'Polo',
+    3
+);
+// $aMammal->name = 'Orso polare';
+// $aMammal->habitat = 'Polo';
+// $aMammal->setGodCode('DCBA4321');
+$aMammal->setOtherGodCode('DCBA4321');
+$aMammal->setOtherLegsNumber(4);
+
+
+var_dump($anAnimal);
+var_dump($aMammal);
+var_dump($aMammal->getFullAnimal());
+var_dump($aMammal->getFullMammal());
+
+var_dump($anAnimal->getGodCode());
+var_dump($aMammal->getGodCode());
+
+var_dump($anAnimal->getLegsNumber());
+var_dump($aMammal->getLegsNumber());
